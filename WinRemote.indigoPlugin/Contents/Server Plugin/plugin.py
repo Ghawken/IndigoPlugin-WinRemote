@@ -570,15 +570,19 @@ class httpHandler(BaseHTTPRequestHandler):
             content_length = int(self.headers['Content-Length'])  # <--- Gets the size of data
             post_data = self.rfile.read(content_length)  # <--- Gets the data itself
               # <-- Print post data
+            windowspath = self.path
+            windowsreply = str(post_data)
+
             if self.plugin.debugserver:
-                self.plugin.logger.debug(unicode(self.path))
-                self.plugin.logger.debug(unicode(post_data))
+                self.plugin.logger.debug(u'self.path data:'+unicode(self.path))
+                self.plugin.logger.debug(u'post.data data:'+unicode(post_data))
 
 
-            windowsreply = str(post_data)  # if StartupConnect will be Hostname
-            windowspath = self.path  # if StartupConnect will have StartupConnect within the path
+              # if StartupConnect will be Hostname
 
-            dictparams = dict(parse_qsl(urlparse(self.path).query))
+              # if StartupConnect will have StartupConnect within the path
+
+            dictparams = dict(parse_qsl(urlparse(windowspath).query))
 
             self.plugin.logger.debug(unicode(dictparams))
 
@@ -616,29 +620,46 @@ class httpHandler(BaseHTTPRequestHandler):
             #     self.plugin.logger.debug(unicode('After Indigo Post Check'))
 
             if 'StartupConnect' in self.path:
-                FoundDevice = False
+
                 for dev in indigo.devices.itervalues('self.WindowsComputer'):
-                    if dev.states['HostName'] == windowsreply:
-                        self.plugin.logger.debug(u'Matching Hostname Found: '+windowspath)
+                    FoundDevice = False
+                    self.plugin.logger.debug(u'Startup of PC IndigoPlugin Noted:')
+                    self.plugin.logger.debug(str(dev.states['HostName'])+': and :'+unicode(windowsreply))
+                    if str(dev.states['HostName']) == windowsreply:
                         FoundDevice = True
+                        #startup and device know - just update
+                        self.plugin.logger.debug(u'Do these Match?:'+str(dev.states['HostName']) + ': and :' + unicode(windowsreply))
+                        self.plugin.logger.debug(u'Matching Hostname Found: '+windowsreply+' Updating States.')
+                        t.sleep(0.5)
+                        stateList = [
+                            {'key': 'HostName', 'value': windowsreply},
+                            {'key': 'deviceIsOnline', 'value': True},
+                            {'key': 'onOffState', 'value': True},
+                            {'key': 'deviceTimestamp', 'value': str(t.time())},
+                            {'key': 'ipAddress', 'value': str(self.client_address[0])}
+                        ]
+                        dev.updateStatesOnServer(stateList)
+                        # Create device and then return
+                        return
                 if FoundDevice == False:
-                    # Create Device
+                    # else Create Device
                     self.plugin.logger.debug(u'Creating new Device for Windows Computer that has communicated.')
                     deviceName = 'Windows Computer: '+windowsreply
                     dev = indigo.device.create(address=deviceName, deviceTypeId='WindowsComputer', name=deviceName,
-                                               protocol=indigo.kProtocol.Plugin, folder='Windows Computers')
-                t.sleep(1)
+                                           protocol=indigo.kProtocol.Plugin, folder='Windows Computers')
+                    t.sleep(1)
                 # update here even if Startup...
-                stateList = [
-                        {'key': 'HostName', 'value': windowsreply},
-                        {'key':'deviceIsOnline', 'value': True},
-                        {'key': 'onOffState', 'value': True},
-                        {'key': 'deviceTimestamp', 'value': str(t.time())},
-                        {'key': 'ipAddress', 'value': str(self.client_address[0])}
-                    ]
-                dev.updateStatesOnServer(stateList)
+                # no - can't do this -- what device? Fix
+                    stateList = [
+                            {'key': 'HostName', 'value': windowsreply},
+                            {'key':'deviceIsOnline', 'value': True},
+                            {'key': 'onOffState', 'value': True},
+                            {'key': 'deviceTimestamp', 'value': str(t.time())},
+                            {'key': 'ipAddress', 'value': str(self.client_address[0])}
+                              ]
+                    dev.updateStatesOnServer(stateList)
                     #Create device and then return
-                return
+                    return
 
             for dev in indigo.devices.itervalues('self.WindowsComputer'):
                 if dev.enabled:
@@ -648,7 +669,6 @@ class httpHandler(BaseHTTPRequestHandler):
                     # self.createupdatevariable(dev.states['optionValue'], 'False')
                         stateList = [
                             {'key': 'cpu', 'value': dictparams['CPU']},
-                            {'key': 'HostName', 'value': dictparams['Hostname']},
                             {'key': 'memFree', 'value': dictparams['MemLoad']},
                             {'key': 'foregroundApp', 'value': dictparams['ForeGroundApp']},
                             {'key': 'ipAddress', 'value': str(self.client_address[0])},
