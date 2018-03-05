@@ -1,0 +1,313 @@
+<?xml version="1.0"?>
+<Devices>
+
+  <Device type="custom" id="BlueIrisServer">
+    <Name>BlueIris Server</Name>
+         <States>
+
+          <State id="cpu">
+                <ValueType>Number</ValueType>
+                <TriggerLabel>CPU Usage</TriggerLabel>
+                <ControlPageLabel>CPU Usage</ControlPageLabel>
+            </State>
+          <State id="deviceState">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Device State Summary</TriggerLabel>
+                <ControlPageLabel>Device State Summary</ControlPageLabel>
+            </State>
+          <State id="deviceIsOnline">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Device online?</TriggerLabel>
+                <ControlPageLabel>Device online?</ControlPageLabel>
+            </State>
+
+              <State id="deviceLastUpdated">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Device Last Updated</TriggerLabel>
+                <ControlPageLabel>Device Last Updated</ControlPageLabel>
+            </State>
+            <State id="deviceTimestamp">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Device Timestamp</TriggerLabel>
+                <ControlPageLabel>Device Timestamp</ControlPageLabel>
+            </State>
+       <State id="cxns">
+                <ValueType>String</ValueType>
+                <TriggerLabel>cxns</TriggerLabel>
+                <ControlPageLabel>cxns</ControlPageLabel>
+            </State>
+            <State id="profile">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Selected Profile</TriggerLabel>
+                <ControlPageLabel>Selected Profile</ControlPageLabel>
+            </State>
+        <State id="uptime">
+                <ValueType>String</ValueType>
+                <TriggerLabel>uptime</TriggerLabel>
+                <ControlPageLabel>uptime</ControlPageLabel>
+            </State>
+            <State id="schedule">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Selected schedule</TriggerLabel>
+                <ControlPageLabel>Selected schedule</ControlPageLabel>
+            </State>
+        <State id="mem">
+                <ValueType>String</ValueType>
+                <TriggerLabel>mem</TriggerLabel>
+                <ControlPageLabel>mem</ControlPageLabel>
+            </State>
+            <State id="lock">
+                <ValueType>String</ValueType>
+                <TriggerLabel>lock</TriggerLabel>
+                <ControlPageLabel>lock</ControlPageLabel>
+            </State>
+        <State id="signal">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Signal</TriggerLabel>
+                <ControlPageLabel>Signal</ControlPageLabel>
+            </State>
+            <State id="alerts">
+                <ValueType>String</ValueType>
+                <TriggerLabel>alerts</TriggerLabel>
+                <ControlPageLabel>alerts</ControlPageLabel>
+            </State>
+         <State id="tzone">
+                <ValueType>String</ValueType>
+                <TriggerLabel>tzone</TriggerLabel>
+                <ControlPageLabel>tzone</ControlPageLabel>
+            </State>
+            <State id="clips">
+                <ValueType>String</ValueType>
+                <TriggerLabel>clips</TriggerLabel>
+                <ControlPageLabel>clips</ControlPageLabel>
+            </State>
+        <State id="memload">
+                <ValueType>String</ValueType>
+                <TriggerLabel>memload</TriggerLabel>
+                <ControlPageLabel>memload</ControlPageLabel>
+            </State>
+            <State id="memfree">
+                <ValueType>String</ValueType>
+                <TriggerLabel>memfree</TriggerLabel>
+                <ControlPageLabel>memfree</ControlPageLabel>
+            </State>
+             <State id="warnings">
+                <ValueType>String</ValueType>
+                <TriggerLabel>warnings</TriggerLabel>
+                <ControlPageLabel>warnings</ControlPageLabel>
+            </State>
+
+
+     </States>
+
+    <UiDisplayStateId>deviceState</UiDisplayStateId>
+  </Device>
+
+  <Device type="custom" id="BlueIrisCamera" >
+        <Name>BlueIris Camera</Name>
+
+
+        <States>
+
+          <State id="Motion">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Motion Detected</TriggerLabel>
+                <ControlPageLabel>Motion Detected</ControlPageLabel>
+            </State>
+
+
+          <State id="deviceIsOnline">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Device online?</TriggerLabel>
+                <ControlPageLabel>Device online?</ControlPageLabel>
+            </State>
+
+            <State id="deviceLastUpdated">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Device Last Updated</TriggerLabel>
+                <ControlPageLabel>Device Last Updated</ControlPageLabel>
+            </State>
+            <State id="deviceTimestamp">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Device Timestamp</TriggerLabel>
+                <ControlPageLabel>Device Timestamp</ControlPageLabel>
+            </State>
+
+            <State id="ManRecLimit">
+                <ValueType>Number</ValueType>
+                <TriggerLabel>ManRectLimit</TriggerLabel>
+                <ControlPageLabel>ManRec Limit</ControlPageLabel>
+            </State>
+            <State id="FPS">
+                <ValueType>Number</ValueType>
+                <TriggerLabel>FPS</TriggerLabel>
+                <ControlPageLabel>FPS</ControlPageLabel>
+            </State>
+            <State id="color">
+                <ValueType>String</ValueType>
+                <TriggerLabel>color</TriggerLabel>
+                <ControlPageLabel>color</ControlPageLabel>
+            </State>
+            <State id="nClips">
+                <ValueType>Number</ValueType>
+                <TriggerLabel>Number Clips</TriggerLabel>
+                <ControlPageLabel>Number Clips</ControlPageLabel>
+            </State>
+
+            <State id="nAlerts">
+                <ValueType>Number</ValueType>
+                <TriggerLabel>Number of Alerts</TriggerLabel>
+                <ControlPageLabel>Number of Alerts</ControlPageLabel>
+            </State>
+            <State id="height">
+                <ValueType>Number</ValueType>
+                <TriggerLabel>Height</TriggerLabel>
+                <ControlPageLabel>Height</ControlPageLabel>
+            </State>
+
+            <State id="active">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>Active</TriggerLabel>
+                <ControlPageLabel>Active</ControlPageLabel>
+            </State>
+            <State id="isAlerting">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>isAlerting</TriggerLabel>
+                <ControlPageLabel>isAlerting</ControlPageLabel>
+            </State>
+            <State id="ptz">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>ptz</TriggerLabel>
+                <ControlPageLabel>ptz</ControlPageLabel>
+            </State>
+            <State id="isYellow">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>isYellow</TriggerLabel>
+                <ControlPageLabel>isYellow</ControlPageLabel>
+            </State>
+            <State id="isNoSignal">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>isNoSignal</TriggerLabel>
+                <ControlPageLabel>isNoSignal</ControlPageLabel>
+            </State>
+            <State id="lastalert">
+                <ValueType>Number</ValueType>
+                <TriggerLabel>last Alert</TriggerLabel>
+                <ControlPageLabel>last Alert</ControlPageLabel>
+            </State>
+            <State id="isEnabled">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>is Enabled</TriggerLabel>
+                <ControlPageLabel>is Enabled</ControlPageLabel>
+            </State>
+            <State id="nTriggers">
+                <ValueType>Number</ValueType>
+                <TriggerLabel>Number of Triggers</TriggerLabel>
+                <ControlPageLabel>Number of Triggers</ControlPageLabel>
+            </State>
+            <State id="width">
+                <ValueType>Number</ValueType>
+                <TriggerLabel>width</TriggerLabel>
+                <ControlPageLabel>width</ControlPageLabel>
+            </State>
+            <State id="alertutc">
+                <ValueType>String</ValueType>
+                <TriggerLabel>alertutc</TriggerLabel>
+                <ControlPageLabel>alertutc</ControlPageLabel>
+            </State>
+            <State id="hidden">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>hidden</TriggerLabel>
+                <ControlPageLabel>hidden</ControlPageLabel>
+            </State>
+            <State id="type">
+                <ValueType>Number</ValueType>
+                <TriggerLabel>type</TriggerLabel>
+                <ControlPageLabel>type</ControlPageLabel>
+            </State>
+            <State id="profile">
+                <ValueType>String</ValueType>
+                <TriggerLabel>profile</TriggerLabel>
+                <ControlPageLabel>profile</ControlPageLabel>
+            </State>
+            <State id="isOnline">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>isOnline</TriggerLabel>
+                <ControlPageLabel>isOnline</ControlPageLabel>
+            </State>
+            <State id="isManRec">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>isManRec</TriggerLabel>
+                <ControlPageLabel>isManRec</ControlPageLabel>
+            </State>
+            <State id="isRecording">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>is Recording</TriggerLabel>
+                <ControlPageLabel>is Recording</ControlPageLabel>
+            </State>
+            <State id="pause">
+                <ValueType>String</ValueType>
+                <TriggerLabel>pause</TriggerLabel>
+                <ControlPageLabel>pause</ControlPageLabel>
+            </State>
+            <State id="optionDisplay">
+                <ValueType>String</ValueType>
+                <TriggerLabel>option Display</TriggerLabel>
+                <ControlPageLabel>option Display</ControlPageLabel>
+            </State>
+            <State id="webcast">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>webcast</TriggerLabel>
+                <ControlPageLabel>webcast</ControlPageLabel>
+            </State>
+            <State id="optionValue">
+                <ValueType>String</ValueType>
+                <TriggerLabel>option Value</TriggerLabel>
+                <ControlPageLabel>option Value</ControlPageLabel>
+            </State>
+            <State id="isTriggered">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>is Triggered</TriggerLabel>
+                <ControlPageLabel>is Triggered</ControlPageLabel>
+            </State>
+            <State id="isMotion">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>isMotion</TriggerLabel>
+                <ControlPageLabel>isMotion</ControlPageLabel>
+            </State>
+            <State id="newalerts">
+                <ValueType>String</ValueType>
+                <TriggerLabel>new alerts</TriggerLabel>
+                <ControlPageLabel>new alerts</ControlPageLabel>
+            </State>
+            <State id="isPaused">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>isPaused</TriggerLabel>
+                <ControlPageLabel>isPaused</ControlPageLabel>
+            </State>
+            <State id="error">
+                <ValueType>String</ValueType>
+                <TriggerLabel>error Value</TriggerLabel>
+                <ControlPageLabel>error Value</ControlPageLabel>
+            </State>
+            <State id="audio">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>audio</TriggerLabel>
+                <ControlPageLabel>audio</ControlPageLabel>
+            </State>
+            <State id="nNoSignal">
+                <ValueType>Number</ValueType>
+                <TriggerLabel>No Signal Number</TriggerLabel>
+                <ControlPageLabel>No Signal Number</ControlPageLabel>
+            </State>
+
+        </States>
+
+        <UiDisplayStateId>Motion</UiDisplayStateId>
+
+    </Device>
+
+
+
+
+</Devices>

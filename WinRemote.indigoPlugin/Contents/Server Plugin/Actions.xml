@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<Actions>
+    <Action id="sendMessage">
+    <Name>Send Message to Computer</Name>
+    <CallbackMethod>actionSendMessage</CallbackMethod>
+        <ConfigUI>
+            <Field id="computer" type="list" rows="14">
+                <Label>Select Computers(s)</Label>
+                <List class="indigo.devices" filter="self.WindowsComputer"/>
+            </Field>
+            <Field id="message" type="textfield">
+            <Label>Message to send:</Label>
+            <Description>Message to Sending</Description>
+        </Field>
+        </ConfigUI>
+    </Action>
+    <Action id="turnOFF">
+    <Name>Turn Off Computer</Name>
+    <CallbackMethod>actionTurnOff</CallbackMethod>
+        <ConfigUI>
+            <Field id="computer" type="list" rows="14">
+                <Label>Select Computers(s)</Label>
+                <List class="indigo.devices" filter="self.WindowsComputer"/>
+            </Field>
+        </ConfigUI>
+    </Action>
+
+    <Action id="wakeonMAC">
+    <Name>Wake Computer using WakeonLan</Name>
+    <CallbackMethod>actionWakeMAC</CallbackMethod>
+        <ConfigUI>
+            <Field id="computer" type="list" rows="14">
+                <Label>Select Computers(s)</Label>
+                <List class="indigo.devices" filter="self.WindowsComputer"/>
+            </Field>
+        </ConfigUI>
+    </Action>
+</Actions>
+

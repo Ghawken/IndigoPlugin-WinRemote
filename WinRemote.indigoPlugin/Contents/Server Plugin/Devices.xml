@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<Devices>
+<Device type="relay" id="WindowsComputer">
+    <Name>Windows Computer</Name>
+
+     <States>
+
+          <State id="cpu">
+                <ValueType>String</ValueType>
+                <TriggerLabel>CPU Usage</TriggerLabel>
+                <ControlPageLabel>CPU Usage</ControlPageLabel>
+            </State>
+          <State id="deviceState">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Device State Summary</TriggerLabel>
+                <ControlPageLabel>Device State Summary</ControlPageLabel>
+            </State>
+         <State id="deviceIsOnline">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Device isOnline</TriggerLabel>
+                <ControlPageLabel>Device isOnline</ControlPageLabel>
+         </State>
+         <State id="HostName">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Host Name</TriggerLabel>
+                <ControlPageLabel>Host Name</ControlPageLabel>
+            </State>
+                  <State id="onOffState">
+                <ValueType>Boolean</ValueType>
+                <TriggerLabel>onOffState</TriggerLabel>
+                <ControlPageLabel>onOffState</ControlPageLabel>
+            </State>
+         <State id="ipAddress">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Current IP Address</TriggerLabel>
+                <ControlPageLabel>Current IP Address</ControlPageLabel>
+            </State>
+                  <State id="memFree">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Memory Free</TriggerLabel>
+                <ControlPageLabel>Memory Free</ControlPageLabel>
+            </State>
+                  <State id="MACaddress">
+                <ValueType>String</ValueType>
+                <TriggerLabel>MAC Address</TriggerLabel>
+                <ControlPageLabel>MAC Address</ControlPageLabel>
+            </State>
+                  <State id="pendingCommands">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Commands to be sent</TriggerLabel>
+                <ControlPageLabel>Commands to be sent</ControlPageLabel>
+            </State>
+                  <State id="deviceTimestamp">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Last Timestamp of communication</TriggerLabel>
+                <ControlPageLabel>Last timestamp of communication</ControlPageLabel>
+            </State>
+
+
+         <State id="foregroundApp">
+                <ValueType>String</ValueType>
+                <TriggerLabel>App Foremost</TriggerLabel>
+                <ControlPageLabel>Application Foremost</ControlPageLabel>
+            </State>
+
+     </States>
+      <UiDisplayStateId>onOffState</UiDisplayStateId>
+
+</Device>
+
+</Devices>
