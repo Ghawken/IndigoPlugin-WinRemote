@@ -9,6 +9,8 @@
   </Field>
 
   <Field id="sep7" type="separator"/>
+
+
 			<Field id="serverport"
 				   type="textfield"
 				   tooltip="Enter your Server Port eg. 9123"
@@ -16,7 +18,10 @@
 				   secure = "False">
 				<Label>Enter your Port:</Label>
 			</Field>
-
+  <Field id="space2another " type="label" fontSize="small" fontColor="black">
+    <Label>The port that the Plugin will use in communication with the Windows Plugin Communicator
+    Defaults to Port 9123.   eg. in the Windows plugin Communicator use IndigoIP:9123 </Label>
+  </Field>
    <Field id="sep7another" type="separator"/>
 
   <Field id="space1" type="label" fontColor="black">

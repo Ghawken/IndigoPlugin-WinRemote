@@ -127,22 +127,22 @@ class GitHubPluginUpdater(object):
 
 		currentVersion = str(self.plugin.pluginVersion)
 
-		self.logger.info('BlueIris Update: Update Checking. Your Current version is: %s' % currentVersion)
+		self.logger.info('WinRemote Update: Update Checking. Your Current version is: %s' % currentVersion)
 
 		update = self.getUpdateAlways(currentVersion)
 
 		if (update == None):
-			self.logger.info('BlueIris Update: Update Checking. No release available')
+			self.logger.info('WinRemote Update: Update Checking. No release available')
 			return False
 		# assume the tag is the release version
 		latestVersion = update['tag_name'].lstrip('v')
 
-		self.logger.info('BlueIris: Update Checking. The Github Latest release is: %s' % latestVersion)
+		self.logger.info('WinRemote: Update Checking. The Github Latest release is: %s' % latestVersion)
 		if (ver(currentVersion) >= ver(latestVersion)):
-			self.logger.info(u'BlueIris: Update Checking. You already have the lastest release.  No update needed.')
+			self.logger.info(u'WinRemote: Update Checking. You already have the lastest release.  No update needed.')
 			return False
 		if (ver(currentVersion) < ver(latestVersion)):
-			self.logger.info(u'BlueIris: Update Checking. Please visit the Plugin Store to Download')
+			self.logger.info(u'WinRemote: Update Checking. Please visit the Plugin Store to Download')
 			return True
 
 		return False

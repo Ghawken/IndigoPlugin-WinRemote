@@ -2,8 +2,12 @@
 # -*- coding: utf-8 -*-
 
 """
-BlueIris Indigo Plugin
-First draft
+Windows Remote Software for Indigo Plugin
+
+Needs to be used in combination with a Windows app
+'Indigo Plugin Communicator'
+
+Essentially useless alone.!
 
 """
 
@@ -166,7 +170,7 @@ class Plugin(indigo.PluginBase):
 
     def restartPlugin(self):
         self.logger.debug(u"Restarting the  Plugin Called.")
-        plugin = indigo.server.getPlugin('com.GlennNZ.indigoplugin.BlueIris')
+        plugin = indigo.server.getPlugin('com.GlennNZ.indigoplugin.WinRemote')
         if plugin.isEnabled():
             plugin.restart(waitUntilDone=False)
 
@@ -178,17 +182,16 @@ class Plugin(indigo.PluginBase):
         dev.stateListOrDisplayStateIdChanged()
         dev.updateStateOnServer('pendingCommands', value='', uiValue='None')
 
+        dev.updateStateOnServer('onOffState', value=False)
+        dev.updateStateOnServer('deviceIsOnline', value=False)
 
     def createupdatevariable(self, variable, result):
 
         if self.debugextra:
             self.logger.debug(u'createupdate variable called.')
 
-        # if 'BlueIris' not in indigo.variables.folders:
-        #     indigo.variables.folder.create('BlueIris')
-
         if variable not in indigo.variables:
-            indigo.variable.create(variable, str(result), folder='BlueIris')
+            indigo.variable.create(variable, str(result), folder='WinRemote')
             return
         else:
             indigo.variable.updateValue(str(variable), str(result))
@@ -247,7 +250,7 @@ class Plugin(indigo.PluginBase):
                         self.logger.debug(u'Offline : deviceTimestamp:t.time:'+unicode(t.time())+' Timestamp:'+unicode(dev.states['deviceTimestamp']))
                         dev.updateStateOnServer('deviceIsOnline', value=False, uiValue='Offline')
                         dev.updateStateOnServer('onOffState', value=False)
-                        dev.updateStateOnServer('deviceState', value='Offline')
+
         return
 
     def shutdown(self):
@@ -309,7 +312,7 @@ class Plugin(indigo.PluginBase):
             cameras = valuesDict.props['deviceCamera']
             #self.logger.info(unicode(cameras))
 
-            for dev in indigo.devices.itervalues('self.BlueIrisCamera'):
+            for dev in indigo.devices.itervalues('self.WindowsComputer'):
                 if str(dev.id) in cameras:
                     self.logger.debug(u'Action is:' + unicode(action) + u' & Camera is:' + unicode(dev.name)+u' and action:'+unicode(actionevent))
                     if actionevent == 'False':
@@ -342,7 +345,7 @@ class Plugin(indigo.PluginBase):
             self.logger.debug('triggerCheck run.  device.id:'+unicode(device.id)+' Camera:'+unicode(camera)+' Event:'+unicode(event))
         try:
             if self.pluginIsInitializing:
-                self.logger.info(u'Trigger: Ignore as BlueIris Plugin Just started.')
+                self.logger.info(u'Trigger: Ignore as WinRemote Plugin Just started.')
                 return
 
             if device.states['deviceIsOnline'] == False:
@@ -388,17 +391,17 @@ class Plugin(indigo.PluginBase):
 
         updateavailable = self.updater.getLatestVersion()
         if updateavailable and self.openStore:
-            self.logger.info(u'BlueIris Plugin: Update Checking.  Update is Available.  Taking you to plugin Store. ')
+            self.logger.info(u'WinRemote Plugin: Update Checking.  Update is Available.  Taking you to plugin Store. ')
             self.sleep(2)
             self.pluginstoreUpdate()
         elif updateavailable and not self.openStore:
-            self.errorLog(u'BlueIris Plugin: Update Checking.  Update is Available.  Please check Store for details/download.')
+            self.errorLog(u'WinRemote Plugin: Update Checking.  Update is Available.  Please check Store for details/download.')
 
     def updatePlugin(self):
         self.updater.update()
 
     def pluginstoreUpdate(self):
-        iurl = 'http://www.indigodomo.com/pluginstore/149/'
+        iurl = 'http://www.indigodomo.com/pluginstore/'
         self.browserOpen(iurl)
 
 ######################
@@ -624,13 +627,12 @@ class httpHandler(BaseHTTPRequestHandler):
                     deviceName = 'Windows Computer: '+windowsreply
                     dev = indigo.device.create(address=deviceName, deviceTypeId='WindowsComputer', name=deviceName,
                                                protocol=indigo.kProtocol.Plugin, folder='Windows Computers')
-
+                t.sleep(1)
                 # update here even if Startup...
                 stateList = [
                         {'key': 'HostName', 'value': windowsreply},
                         {'key':'deviceIsOnline', 'value': True},
                         {'key': 'onOffState', 'value': True},
-                        {'key': 'deviceState', 'value': True, 'uiValue':'Online'},
                         {'key': 'deviceTimestamp', 'value': str(t.time())},
                         {'key': 'ipAddress', 'value': str(self.client_address[0])}
                     ]
@@ -651,7 +653,6 @@ class httpHandler(BaseHTTPRequestHandler):
                             {'key': 'foregroundApp', 'value': dictparams['ForeGroundApp']},
                             {'key': 'ipAddress', 'value': str(self.client_address[0])},
                             {'key':'deviceIsOnline', 'value': True},
-                            {'key':'deviceState', 'value':True, 'uiValue':'Online'},
                             {'key':'deviceTimestamp', 'value':str(t.time())},
                             {'key': 'onOffState', 'value': True},
                             {'key': 'MACaddress', 'value': dictparams['MAC']}

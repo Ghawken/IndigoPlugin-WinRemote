@@ -10,11 +10,6 @@
                 <TriggerLabel>CPU Usage</TriggerLabel>
                 <ControlPageLabel>CPU Usage</ControlPageLabel>
             </State>
-          <State id="deviceState">
-                <ValueType>String</ValueType>
-                <TriggerLabel>Device State Summary</TriggerLabel>
-                <ControlPageLabel>Device State Summary</ControlPageLabel>
-            </State>
          <State id="deviceIsOnline">
                 <ValueType>String</ValueType>
                 <TriggerLabel>Device isOnline</TriggerLabel>
