@@ -20,10 +20,10 @@
                 <TriggerLabel>Host Name</TriggerLabel>
                 <ControlPageLabel>Host Name</ControlPageLabel>
             </State>
-                  <State id="onOffState">
-                <ValueType>Boolean</ValueType>
-                <TriggerLabel>onOffState</TriggerLabel>
-                <ControlPageLabel>onOffState</ControlPageLabel>
+                  <State id="userName">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Logged in User</TriggerLabel>
+                <ControlPageLabel>Logged in User</ControlPageLabel>
             </State>
          <State id="ipAddress">
                 <ValueType>String</ValueType>
@@ -34,6 +34,16 @@
                 <ValueType>String</ValueType>
                 <TriggerLabel>Memory Free</TriggerLabel>
                 <ControlPageLabel>Memory Free</ControlPageLabel>
+            </State>
+                           <State id="idleTime">
+                <ValueType>Number</ValueType>
+                <TriggerLabel>idleTime Minutes</TriggerLabel>
+                <ControlPageLabel>idleTime Minutes</ControlPageLabel>
+            </State>
+                                    <State id="upTime">
+                <ValueType>Number</ValueType>
+                <TriggerLabel>System Up Time Hours</TriggerLabel>
+                <ControlPageLabel>System Up Time Hours</ControlPageLabel>
             </State>
                   <State id="MACaddress">
                 <ValueType>String</ValueType>

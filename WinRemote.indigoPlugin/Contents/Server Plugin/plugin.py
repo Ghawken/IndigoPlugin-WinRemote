@@ -620,10 +620,10 @@ class httpHandler(BaseHTTPRequestHandler):
             #     self.plugin.logger.debug(unicode('After Indigo Post Check'))
 
             if 'StartupConnect' in self.path:
-
+                self.plugin.logger.debug(u'Startup of PC IndigoPlugin Noted:')
                 for dev in indigo.devices.itervalues('self.WindowsComputer'):
                     FoundDevice = False
-                    self.plugin.logger.debug(u'Startup of PC IndigoPlugin Noted:')
+
                     self.plugin.logger.debug(str(dev.states['HostName'])+': and :'+unicode(windowsreply))
                     if str(dev.states['HostName']) == windowsreply:
                         FoundDevice = True
@@ -664,6 +664,13 @@ class httpHandler(BaseHTTPRequestHandler):
             for dev in indigo.devices.itervalues('self.WindowsComputer'):
                 if dev.enabled:
 
+                    userName = 'unknown'
+                    if 'userName' in dictparams:
+                        userName = dictparams['userName']
+                    upTime = 0
+                    if 'upTime' in dictparams:
+                        upTime = int(dictparams['upTime'])
+
                     if dev.states['HostName']== dictparams['Hostname']:
                         #dev.updateStateOnServer('deviceIsOnline', value=True)
                     # self.createupdatevariable(dev.states['optionValue'], 'False')
@@ -672,10 +679,13 @@ class httpHandler(BaseHTTPRequestHandler):
                             {'key': 'memFree', 'value': dictparams['MemLoad']},
                             {'key': 'foregroundApp', 'value': dictparams['ForeGroundApp']},
                             {'key': 'ipAddress', 'value': str(self.client_address[0])},
-                            {'key':'deviceIsOnline', 'value': True},
-                            {'key':'deviceTimestamp', 'value':str(t.time())},
+                            {'key': 'deviceIsOnline', 'value': True},
+                            {'key': 'deviceTimestamp', 'value':str(t.time())},
                             {'key': 'onOffState', 'value': True},
-                            {'key': 'MACaddress', 'value': dictparams['MAC']}
+                            {'key': 'MACaddress', 'value': dictparams['MAC']},
+                            {'key': 'idleTime', 'value': dictparams['Idle']},
+                            {'key': 'userName', 'value': userName},
+                            {'key': 'upTime', 'value': upTime}
                         ]
                         dev.updateStatesOnServer(stateList)
 
