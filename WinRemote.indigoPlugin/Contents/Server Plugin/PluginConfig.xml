@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <PluginConfig>
-  <Field id="infoLabel0" type="label" fontSize='large' fontColor="black">
+
+    <Field id="infoLabel0" type="label" fontSize='large' fontColor="black">
     <Label>Windows Computer Indigo Plugin</Label>
   </Field>
 
@@ -9,25 +10,27 @@
   </Field>
 
   <Field id="sep7" type="separator"/>
-
-
 			<Field id="serverport"
 				   type="textfield"
 				   tooltip="Enter your Server Port eg. 9123"
-				   default="9123"
+				   default='9123'
 				   secure = "False">
 				<Label>Enter your Port:</Label>
 			</Field>
-  <Field id="space2another " type="label" fontSize="small" fontColor="black">
+
+  <Field id="space2another" type="label" fontSize="small" fontColor="black">
     <Label>The port that the Plugin will use in communication with the Windows Plugin Communicator
     Defaults to Port 9123.   eg. in the Windows plugin Communicator use IndigoIP:9123 </Label>
   </Field>
+
    <Field id="sep7another" type="separator"/>
 
   <Field id="space1" type="label" fontColor="black">
     <Label>Check for Updates:</Label>
   </Field>
+
   <Field id="sep6" type="separator"/>
+
   <Field id="space2" type="label" fontSize="small" fontColor="black">
     <Label>The amount of time that the plugin will wait between checking for updated version</Label>
   </Field>
@@ -40,25 +43,24 @@
     <Label> Open PluginStore if newer version at time of check</Label>
     <Description>Enable/Disable</Description>
   </Field>
- <Field id="sep9" type="separator"/>
+ <Field id="sep9a" type="separator"/>
 
-  <Field id="space10" type="label" alignText="left">
+  <Field id="space101" type="label" alignText="left">
     <Label>Debugging:</Label>
   </Field>
 
-  <Field id="sep4" type="separator"/>
+  <Field id="sep421" type="separator"/>
 
   <Field id="space11" type="label" fontSize="small">
     <Label>Turn on debugging only when needed. Be careful when posting the output to the forums or other public places as it could expose sensitive information.</Label>
   </Field>
 
     <Field id="debugextra" type="checkbox" tooltip="Debug Session Key.">
-        <Label/>
+        <Label></Label>
         <Description>Debug Extra</Description>
     </Field>
 
-
-    <Field id="showDebugLevel" type="menu" defaultValue="20" tooltip="Controls the amount of debug information written to the log.">
+    <Field id="showDebugLevel" type="menu" defaultValue="20" tooltip="Controls the amount of debug information written to the log">
         <Label>Debug level:</Label>
         <Description>Level of Debug information to show in Indigo</Description>
         <List>
