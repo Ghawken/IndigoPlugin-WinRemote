@@ -450,7 +450,7 @@ class Plugin(indigo.PluginBase):
         return
 
     def actionTurnOff(self, valuesDict):
-        self.logger.debug(u'Send Message Called.')
+        self.logger.debug(u'Turn Off Called.')
         try:
             computers = valuesDict.props['computer']
             message = 'This computer will be turned off in 10 seconds'
@@ -460,6 +460,19 @@ class Plugin(indigo.PluginBase):
                     dev.updateStateOnServer('pendingCommands', value=str(tobesent), uiValue='Pending...')
         except:
             self.logger.exception(u'Exception in action Send Message')
+        return
+
+    def actionLock(self, valuesDict):
+        self.logger.debug(u'actionLock Message Called.')
+        try:
+            computers = valuesDict.props['computer']
+            message = 'This computer will be Locked off in 10 seconds'
+            for dev in indigo.devices.itervalues('self.WindowsComputer'):
+                if str(dev.id) in computers:
+                    tobesent = 'COMMAND LOCK',message
+                    dev.updateStateOnServer('pendingCommands', value=str(tobesent), uiValue='Pending...')
+        except:
+            self.logger.exception(u'Exception in action Lock')
         return
 
     def actionWakeMACbydevid(self,devid):
@@ -663,7 +676,21 @@ class httpHandler(BaseHTTPRequestHandler):
 
             for dev in indigo.devices.itervalues('self.WindowsComputer'):
                 if dev.enabled:
-
+                    CPU = 'unknown'
+                    if 'CPU' in dictparams:
+                        CPU = dictparams['CPU']
+                    MemFree = 'unknown'
+                    if 'MemLoad' in dictparams:
+                        MemFree = dictparams['MemLoad']
+                    FGApp = 'unknown'
+                    if 'ForeGroundApp' in dictparams:
+                        FGApp = dictparams['ForeGroundApp']
+                    MACaddress = ''
+                    if 'MAC' in dictparams:
+                        MACaddress = dictparams['MAC']
+                    idletime = 0
+                    if 'Idle' in dictparams:
+                        idletime = int(dictparams['Idle'])
                     userName = 'unknown'
                     if 'userName' in dictparams:
                         userName = dictparams['userName']
@@ -675,15 +702,15 @@ class httpHandler(BaseHTTPRequestHandler):
                         #dev.updateStateOnServer('deviceIsOnline', value=True)
                     # self.createupdatevariable(dev.states['optionValue'], 'False')
                         stateList = [
-                            {'key': 'cpu', 'value': dictparams['CPU']},
-                            {'key': 'memFree', 'value': dictparams['MemLoad']},
-                            {'key': 'foregroundApp', 'value': dictparams['ForeGroundApp']},
+                            {'key': 'cpu', 'value': CPU},
+                            {'key': 'memFree', 'value': MemFree},
+                            {'key': 'foregroundApp', 'value': FGApp},
                             {'key': 'ipAddress', 'value': str(self.client_address[0])},
                             {'key': 'deviceIsOnline', 'value': True},
                             {'key': 'deviceTimestamp', 'value':str(t.time())},
                             {'key': 'onOffState', 'value': True},
-                            {'key': 'MACaddress', 'value': dictparams['MAC']},
-                            {'key': 'idleTime', 'value': dictparams['Idle']},
+                            {'key': 'MACaddress', 'value': MACaddress},
+                            {'key': 'idleTime', 'value': idletime},
                             {'key': 'userName', 'value': userName},
                             {'key': 'upTime', 'value': upTime}
                         ]

@@ -14,7 +14,7 @@
         </Field>
         </ConfigUI>
     </Action>
-    <Action id="turnOFF">
+    <Action id="lockComputer">
     <Name>Turn Off Computer</Name>
     <CallbackMethod>actionTurnOff</CallbackMethod>
         <ConfigUI>
@@ -24,6 +24,18 @@
             </Field>
         </ConfigUI>
     </Action>
+
+    <Action id="turnOFF">
+    <Name>Lock Computer</Name>
+    <CallbackMethod>actionLock</CallbackMethod>
+        <ConfigUI>
+            <Field id="computer" type="list" rows="14">
+                <Label>Select Computers(s)</Label>
+                <List class="indigo.devices" filter="self.WindowsComputer"/>
+            </Field>
+        </ConfigUI>
+    </Action>
+
 
     <Action id="wakeonMAC">
     <Name>Wake Computer using WakeonLan</Name>
