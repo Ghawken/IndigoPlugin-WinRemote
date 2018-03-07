@@ -137,7 +137,7 @@ class Plugin(indigo.PluginBase):
         if not userCancelled:
             self.debugLevel = valuesDict.get('showDebugLevel', "10")
             self.debugLog(u"User prefs saved.")
-            self.listenPort = valuesDict.get('serverport',9123)
+            self.listenPort = int(valuesDict.get('serverport',9123))
 
         return True
 
@@ -634,9 +634,8 @@ class httpHandler(BaseHTTPRequestHandler):
 
             if 'StartupConnect' in self.path:
                 self.plugin.logger.debug(u'Startup of PC IndigoPlugin Noted:')
+                FoundDevice = False
                 for dev in indigo.devices.itervalues('self.WindowsComputer'):
-                    FoundDevice = False
-
                     self.plugin.logger.debug(str(dev.states['HostName'])+': and :'+unicode(windowsreply))
                     if str(dev.states['HostName']) == windowsreply:
                         FoundDevice = True
