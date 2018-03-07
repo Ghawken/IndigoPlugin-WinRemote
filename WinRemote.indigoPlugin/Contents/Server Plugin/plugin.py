@@ -690,13 +690,13 @@ class httpHandler(BaseHTTPRequestHandler):
                         MACaddress = dictparams['MAC']
                     idletime = 0
                     if 'Idle' in dictparams:
-                        idletime = int(dictparams['Idle'])
+                        idletime = float(dictparams['Idle'])
                     userName = 'unknown'
                     if 'userName' in dictparams:
                         userName = dictparams['userName']
                     upTime = 0
                     if 'upTime' in dictparams:
-                        upTime = int(dictparams['upTime'])
+                        upTime = float(dictparams['upTime'])
 
                     if dev.states['HostName']== dictparams['Hostname']:
                         #dev.updateStateOnServer('deviceIsOnline', value=True)
