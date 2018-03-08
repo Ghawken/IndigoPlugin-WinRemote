@@ -101,22 +101,10 @@ class Plugin(indigo.PluginBase):
 
         self.debugserver = True
 
-        # self.logger.info(unicode(self.pluginPrefs.get('Httpserverport','4556')))
-
-        #self.listenPort = int(self.pluginPrefs.get('Httpserverport','4556'))
-        # if self.listenPort is None:
-        #     self.listenPort = 4556
-        # elif self.listenPort == '':
-        #     self.listenPort = 4556
-
-        # self.listenPort = int(self.listenPort)
-
-
         #self.configUpdaterForceUpdate = self.pluginPrefs.get('configUpdaterForceUpdate', False)
         self.openStore = self.pluginPrefs.get('openStore', False)
         self.updateFrequency = float(self.pluginPrefs.get('updateFrequency', "24")) * 60.0 * 60.0
         self.next_update_check = t.time() + 20
-
         self.pluginIsInitializing = False
 
         #self.startlistenHttpThread()
@@ -144,7 +132,6 @@ class Plugin(indigo.PluginBase):
     def validateDeviceConfigUi(self, valuesDict, typeID, devId):
         self.logger.debug(u'validateDeviceConfigUi Called')
         errorDict = indigo.Dict()
-
         return (True, valuesDict, errorDict)
 
 
@@ -177,7 +164,6 @@ class Plugin(indigo.PluginBase):
 
     # Start 'em up.
     def deviceStartComm(self, dev):
-
         self.logger.debug(u"deviceStartComm() method called.")
         dev.stateListOrDisplayStateIdChanged()
         dev.updateStateOnServer('pendingCommands', value='', uiValue='None')
@@ -200,11 +186,8 @@ class Plugin(indigo.PluginBase):
     # Shut 'em down.
 
     def deviceStopComm(self, dev):
-
         self.logger.debug(u"deviceStopComm() method called.")
         #indigo.server.log(u"Stopping device: " + dev.name)
-
-
 
     def runConcurrentThread(self):
 
@@ -239,7 +222,8 @@ class Plugin(indigo.PluginBase):
             pass
 
     def checktheComputers(self):
-        self.logger.debug(u'------------------------ checkComputers run----------------------------')
+        if self.debugextra:
+            self.logger.debug(u'checkComputers run')
 
         for dev in indigo.devices.itervalues('self.WindowsComputer'):
             if dev.enabled:
@@ -274,7 +258,6 @@ class Plugin(indigo.PluginBase):
     def toggleDebugEnabled(self):
         """ Toggle debug on/off. """
 
-
         self.logger.debug(u"toggleDebugEnabled() method called.")
 
         if self.debugLevel == int(logging.INFO):
@@ -298,11 +281,7 @@ class Plugin(indigo.PluginBase):
             self.logger.debug(u"New logLevel = " + str(self.logLevel))
             self.indigo_log_handler.setLevel(self.logLevel)
 
-
-
-#
-
-
+#################################################################################################
     def pluginTriggering(self, valuesDict):
         self.logger.debug(u'pluginTriggering called')
         try:
@@ -451,13 +430,19 @@ class Plugin(indigo.PluginBase):
 
     def actionTurnOff(self, valuesDict):
         self.logger.debug(u'Turn Off Called.')
+
         try:
             computers = valuesDict.props['computer']
             message = 'This computer will be turned off in 10 seconds'
             for dev in indigo.devices.itervalues('self.WindowsComputer'):
                 if str(dev.id) in computers:
+                    turnOff = dev.pluginProps.get('turnOff', False)
+
                     tobesent = 'COMMAND OFF',message
-                    dev.updateStateOnServer('pendingCommands', value=str(tobesent), uiValue='Pending...')
+                    if turnOff == False:
+                        dev.updateStateOnServer('pendingCommands', value=str(tobesent), uiValue='Pending...')
+                    else:
+                        self.logger.debug(u'Turn Off Command not sent as Disabled within Device Config')
         except:
             self.logger.exception(u'Exception in action Send Message')
         return
@@ -563,7 +548,7 @@ class httpHandler(BaseHTTPRequestHandler):
     def __init__(self,plugin, *args):
         self.plugin=plugin
         #self.logger = logger
-        if self.plugin.debugserver:
+        if self.plugin.debugextra:
             self.plugin.logger.debug(u'New Http Handler thread:'+threading.currentThread().getName()+", total threads: "+str(threading.activeCount()))
         BaseHTTPRequestHandler.__init__(self, *args)
 
@@ -574,7 +559,7 @@ class httpHandler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         global rootnode
-        if self.plugin.debugserver:
+        if self.plugin.debugextra:
             self.plugin.logger.debug(u'Received Http POST')
             self.plugin.logger.debug(u'Sending HTTP 200 Response')
             self.plugin.logger.debug(u'Self Ip Address:'+unicode(self.client_address))
@@ -586,7 +571,7 @@ class httpHandler(BaseHTTPRequestHandler):
             windowspath = self.path
             windowsreply = str(post_data)
 
-            if self.plugin.debugserver:
+            if self.plugin.debugextra:
                 self.plugin.logger.debug(u'self.path data:'+unicode(self.path))
                 self.plugin.logger.debug(u'post.data data:'+unicode(post_data))
 
@@ -596,8 +581,8 @@ class httpHandler(BaseHTTPRequestHandler):
               # if StartupConnect will have StartupConnect within the path
 
             dictparams = dict(parse_qsl(urlparse(windowspath).query))
-
-            self.plugin.logger.debug(unicode(dictparams))
+            if self.plugin.debugextra:
+                self.plugin.logger.debug(unicode(dictparams))
 
             replytosend = 'No pending Cmds.  Carry on....'
             ## sort out replies later
@@ -610,7 +595,8 @@ class httpHandler(BaseHTTPRequestHandler):
                     if dev.states['HostName'] == dictparams['Hostname']:
                         # okay reply from or for this specific device
                         # now check pending commands
-                        self.plugin.logger.debug('Command Matching HostName here...')
+                        if self.plugin.debugextra:
+                            self.plugin.logger.debug('Command Matching HostName here...')
                         if str(dev.states['pendingCommands']) !='':
                             commands = ast.literal_eval((dev.states['pendingCommands']))
                             #self.plugin.logger.error(unicode(commands[0]))
@@ -618,7 +604,8 @@ class httpHandler(BaseHTTPRequestHandler):
                             command = str(commands[0])
                             command2 = str(commands[1])
                             replytosend = command+' :'+command2+':'
-                            self.plugin.logger.debug('Command Processed: Sending reply:'+unicode(replytosend))
+                            if self.plugin.debugextra:
+                                self.plugin.logger.debug('Command Processed: Sending reply:'+unicode(replytosend))
                             ## Delete the info
                             dev.updateStateOnServer('pendingCommands', value='', uiValue='None')
             ######
@@ -636,12 +623,13 @@ class httpHandler(BaseHTTPRequestHandler):
                 self.plugin.logger.debug(u'Startup of PC IndigoPlugin Noted:')
                 FoundDevice = False
                 for dev in indigo.devices.itervalues('self.WindowsComputer'):
-                    self.plugin.logger.debug(str(dev.states['HostName'])+': and :'+unicode(windowsreply))
+                    #self.plugin.logger.debug(str(dev.states['HostName'])+': and :'+unicode(windowsreply))
                     if str(dev.states['HostName']) == windowsreply:
                         FoundDevice = True
                         #startup and device know - just update
-                        self.plugin.logger.debug(u'Do these Match?:'+str(dev.states['HostName']) + ': and :' + unicode(windowsreply))
-                        self.plugin.logger.debug(u'Matching Hostname Found: '+windowsreply+' Updating States.')
+                        if self.plugin.debugextra:
+                            self.plugin.logger.debug(u'Do these Match?:'+str(dev.states['HostName']) + ': and :' + unicode(windowsreply))
+                            self.plugin.logger.debug(u'Matching Hostname Found: '+windowsreply+' Updating States.')
                         t.sleep(0.5)
                         stateList = [
                             {'key': 'HostName', 'value': windowsreply},
@@ -655,7 +643,8 @@ class httpHandler(BaseHTTPRequestHandler):
                         return
                 if FoundDevice == False:
                     # else Create Device
-                    self.plugin.logger.debug(u'Creating new Device for Windows Computer that has communicated.')
+                    if self.plugin.debugextra:
+                        self.plugin.logger.debug(u'Creating new Device for Windows Computer that has communicated.')
                     deviceName = 'Windows Computer: '+windowsreply
                     dev = indigo.device.create(address=deviceName, deviceTypeId='WindowsComputer', name=deviceName,
                                            protocol=indigo.kProtocol.Plugin, folder='Windows Computers')
@@ -720,7 +709,5 @@ class httpHandler(BaseHTTPRequestHandler):
             self.plugin.logger.exception(u'Exception in do_POST single thread.')
             return
 
-#todo
-#add Motion Ended Trigger
-#Consider trigger animgif finished...
+
 

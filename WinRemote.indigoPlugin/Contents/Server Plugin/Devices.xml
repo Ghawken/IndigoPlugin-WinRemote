@@ -2,7 +2,20 @@
 <Devices>
 <Device type="relay" id="WindowsComputer">
     <Name>Windows Computer</Name>
+    <ConfigUI>
+        <Field id="sepa4" type="separator"/>
 
+        <Field id="label22" type="label"  fontColor="black">
+    <Label>If below is checked Turn Off commands will be ignore for this device
+
+    </Label>
+  </Field>
+        <Field id="turnOff" type="checkbox" tooltip="Save Image if Motion.">
+        <Label/>
+        <Description>Ignore Turn OFF commands</Description>
+    </Field>
+
+    </ConfigUI>
      <States>
 
           <State id="cpu">
