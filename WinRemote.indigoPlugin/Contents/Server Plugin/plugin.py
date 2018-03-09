@@ -685,6 +685,9 @@ class httpHandler(BaseHTTPRequestHandler):
                     upTime = 0
                     if 'upTime' in dictparams:
                         upTime = float(dictparams['upTime'])
+                    version = 'unknown'
+                    if 'version' in dictparams:
+                        version = dictparams['version']
 
                     if dev.states['HostName']== dictparams['Hostname']:
                         #dev.updateStateOnServer('deviceIsOnline', value=True)
@@ -700,6 +703,7 @@ class httpHandler(BaseHTTPRequestHandler):
                             {'key': 'MACaddress', 'value': MACaddress},
                             {'key': 'idleTime', 'value': idletime},
                             {'key': 'userName', 'value': userName},
+                            {'key': 'WindowsVersion', 'value': version},
                             {'key': 'upTime', 'value': upTime}
                         ]
                         dev.updateStatesOnServer(stateList)

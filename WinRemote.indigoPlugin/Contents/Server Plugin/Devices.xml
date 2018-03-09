@@ -33,6 +33,11 @@
                 <TriggerLabel>Host Name</TriggerLabel>
                 <ControlPageLabel>Host Name</ControlPageLabel>
             </State>
+                  <State id="WindowsVersion">
+                <ValueType>String</ValueType>
+                <TriggerLabel>Windows Version</TriggerLabel>
+                <ControlPageLabel>Windows Version</ControlPageLabel>
+            </State>
                   <State id="userName">
                 <ValueType>String</ValueType>
                 <TriggerLabel>Logged in User</TriggerLabel>
