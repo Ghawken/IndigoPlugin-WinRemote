@@ -401,9 +401,13 @@ class Plugin(indigo.PluginBase):
     def actionControlDevice(self, action, dev):
         self.logger.debug(u'Turn On/Turn Off Called' )
         if action.deviceAction == indigo.kDeviceAction.TurnOff:
+            turnOff = dev.pluginProps.get('turnOff', False)
             self.logger.debug(u"actionControlDevice: \"%s\" Turn Off" % dev.name)
-            tobesent = {'COMMAND': 'OFF', 'COMMAND2': '', 'COMMAND3': '', 'COMMAND4': ''}
-            dev.updateStateOnServer('pendingCommands', value=str(tobesent), uiValue='Pending...')
+            if turnOff:
+                tobesent = {'COMMAND': 'OFF', 'COMMAND2': '', 'COMMAND3': '', 'COMMAND4': ''}
+                dev.updateStateOnServer('pendingCommands', value=str(tobesent), uiValue='Pending...')
+            else:
+                self.logger.debug(u'Turn Off Command not sent as Disabled within Device Config')
             return
         elif action.deviceAction == indigo.kDeviceAction.TurnOn:
             self.logger.debug(u"actionControlDevice: \"%s\" Turn On" % dev.name)
@@ -424,6 +428,7 @@ class Plugin(indigo.PluginBase):
                 if str(dev.id) in computers:
                     tobesent = { 'COMMAND':'PROCESS','COMMAND2':str(process), 'COMMAND3':str(arguments),'COMMAND4':'' }
                     dev.updateStateOnServer('pendingCommands', value=str(tobesent), uiValue='Pending...')
+
         except:
             self.logger.exception(u'Exception in action Send Message')
         return
