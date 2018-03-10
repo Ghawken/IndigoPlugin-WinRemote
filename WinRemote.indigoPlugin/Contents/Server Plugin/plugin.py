@@ -452,8 +452,6 @@ class Plugin(indigo.PluginBase):
             for dev in indigo.devices.itervalues('self.WindowsComputer'):
                 if str(dev.id) in computers:
                     turnOff = dev.pluginProps.get('turnOff', False)
-
-                    tobesent = 'COMMAND RESTART',message
                     tobesent = {'COMMAND': 'RESTART','COMMAND2':'', 'COMMAND3':'','COMMAND4':'' }
                     # check device settings ignore if turn off ignored.
                     if turnOff == False:

@@ -14,7 +14,8 @@
         </Field>
         </ConfigUI>
     </Action>
-    <Action id="lockComputer">
+
+    <Action id="turnOFF">
     <Name>Turn Off Computer</Name>
     <CallbackMethod>actionTurnOff</CallbackMethod>
         <ConfigUI>
@@ -25,9 +26,9 @@
         </ConfigUI>
     </Action>
 
-    <Action id="turnOFF">
+    <Action id="restart">
     <Name>Restart Computer</Name>
-    <CallbackMethod>actionLock</CallbackMethod>
+    <CallbackMethod>actionRestart</CallbackMethod>
         <ConfigUI>
             <Field id="computer" type="list" rows="14">
                 <Label>Select Computers(s)</Label>
@@ -35,9 +36,10 @@
             </Field>
         </ConfigUI>
     </Action>
-    <Action id="restart">
+
+    <Action id="lockComputer">
     <Name>Lock Computer</Name>
-    <CallbackMethod>actionRestart</CallbackMethod>
+    <CallbackMethod>actionLock</CallbackMethod>
         <ConfigUI>
             <Field id="computer" type="list" rows="14">
                 <Label>Select Computers(s)</Label>
