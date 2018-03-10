@@ -403,7 +403,7 @@ class Plugin(indigo.PluginBase):
         if action.deviceAction == indigo.kDeviceAction.TurnOff:
             turnOff = dev.pluginProps.get('turnOff', False)
             self.logger.debug(u"actionControlDevice: \"%s\" Turn Off" % dev.name)
-            if turnOff:
+            if turnOff==False:
                 tobesent = {'COMMAND': 'OFF', 'COMMAND2': '', 'COMMAND3': '', 'COMMAND4': ''}
                 dev.updateStateOnServer('pendingCommands', value=str(tobesent), uiValue='Pending...')
             else:
