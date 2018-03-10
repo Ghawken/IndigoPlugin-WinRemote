@@ -402,7 +402,7 @@ class Plugin(indigo.PluginBase):
         self.logger.debug(u'Turn On/Turn Off Called' )
         if action.deviceAction == indigo.kDeviceAction.TurnOff:
             self.logger.debug(u"actionControlDevice: \"%s\" Turn Off" % dev.name)
-            tobesent = 'COMMAND OFF', 'Turn Off Please'
+            tobesent = {'COMMAND': 'OFF', 'COMMAND2': '', 'COMMAND3': '', 'COMMAND4': ''}
             dev.updateStateOnServer('pendingCommands', value=str(tobesent), uiValue='Pending...')
             return
         elif action.deviceAction == indigo.kDeviceAction.TurnOn:
@@ -413,6 +413,20 @@ class Plugin(indigo.PluginBase):
             self.logger.info(u'Send Status Not Supported.')
             return
 
+    def actionrunProcess(self, valuesDict):
+        self.logger.debug(u'Send Message Called.')
+        try:
+            computers = valuesDict.props['computer']
+            process = valuesDict.props['process']
+            arguments = valuesDict.props['arguments']
+            for dev in indigo.devices.itervalues('self.WindowsComputer'):
+
+                if str(dev.id) in computers:
+                    tobesent = { 'COMMAND':'PROCESS','COMMAND2':str(process), 'COMMAND3':str(arguments),'COMMAND4':'' }
+                    dev.updateStateOnServer('pendingCommands', value=str(tobesent), uiValue='Pending...')
+        except:
+            self.logger.exception(u'Exception in action Send Message')
+        return
 
 
     def actionSendMessage(self, valuesDict):
@@ -422,15 +436,36 @@ class Plugin(indigo.PluginBase):
             message = valuesDict.props['message']
             for dev in indigo.devices.itervalues('self.WindowsComputer'):
                 if str(dev.id) in computers:
-                    tobesent = 'COMMAND MESSAGE',message
+                    #tobesent = 'COMMAND MESSAGE',message
+                    tobesent = {'COMMAND': 'MESSAGE', 'COMMAND2': str(message), 'COMMAND3':'','COMMAND4':'' }
                     dev.updateStateOnServer('pendingCommands', value=str(tobesent), uiValue='Pending...')
+        except:
+            self.logger.exception(u'Exception in action Send Message')
+        return
+
+    def actionRestart(self, valuesDict):
+        self.logger.debug(u'Restart Command Called.')
+
+        try:
+            computers = valuesDict.props['computer']
+            message = 'This computer will be restarted in 20 seconds'
+            for dev in indigo.devices.itervalues('self.WindowsComputer'):
+                if str(dev.id) in computers:
+                    turnOff = dev.pluginProps.get('turnOff', False)
+
+                    tobesent = 'COMMAND RESTART',message
+                    tobesent = {'COMMAND': 'RESTART','COMMAND2':'', 'COMMAND3':'','COMMAND4':'' }
+                    # check device settings ignore if turn off ignored.
+                    if turnOff == False:
+                        dev.updateStateOnServer('pendingCommands', value=str(tobesent), uiValue='Pending...')
+                    else:
+                        self.logger.info(u'Restart Command not sent as Disabled within Device Config')
         except:
             self.logger.exception(u'Exception in action Send Message')
         return
 
     def actionTurnOff(self, valuesDict):
         self.logger.debug(u'Turn Off Called.')
-
         try:
             computers = valuesDict.props['computer']
             message = 'This computer will be turned off in 10 seconds'
@@ -438,7 +473,8 @@ class Plugin(indigo.PluginBase):
                 if str(dev.id) in computers:
                     turnOff = dev.pluginProps.get('turnOff', False)
 
-                    tobesent = 'COMMAND OFF',message
+                   # tobesent = 'COMMAND OFF',message
+                    tobesent = {'COMMAND': 'OFF','COMMAND2':'', 'COMMAND3':'','COMMAND4':'' }
                     if turnOff == False:
                         dev.updateStateOnServer('pendingCommands', value=str(tobesent), uiValue='Pending...')
                     else:
@@ -455,6 +491,7 @@ class Plugin(indigo.PluginBase):
             for dev in indigo.devices.itervalues('self.WindowsComputer'):
                 if str(dev.id) in computers:
                     tobesent = 'COMMAND LOCK',message
+                    tobesent = {'COMMAND': 'LOCK','COMMAND2':'', 'COMMAND3':'','COMMAND4':'' }
                     dev.updateStateOnServer('pendingCommands', value=str(tobesent), uiValue='Pending...')
         except:
             self.logger.exception(u'Exception in action Lock')
@@ -584,7 +621,8 @@ class httpHandler(BaseHTTPRequestHandler):
             if self.plugin.debugextra:
                 self.plugin.logger.debug(unicode(dictparams))
 
-            replytosend = 'No pending Cmds.  Carry on....'
+            ## default to blank command set
+            replytosend = { 'COMMAND':'','COMMAND2':'', 'COMMAND3':'', 'COMMAND4':'' }
             ## sort out replies later
             ## Send reply back to Computer depending on what is pending
             ## Only One Command possible at time
@@ -598,12 +636,15 @@ class httpHandler(BaseHTTPRequestHandler):
                         if self.plugin.debugextra:
                             self.plugin.logger.debug('Command Matching HostName here...')
                         if str(dev.states['pendingCommands']) !='':
-                            commands = ast.literal_eval((dev.states['pendingCommands']))
+                            #commands = ast.literal_eval((dev.states['pendingCommands']))
                             #self.plugin.logger.error(unicode(commands[0]))
                             #self.plugin.logger.error(unicode(commands[1]))
-                            command = str(commands[0])
-                            command2 = str(commands[1])
-                            replytosend = command+' :'+command2+':'
+                            #command = str(commands[0])
+                            #command2 = str(commands[1])
+                            #replytosend = command+' :'+command2+':'
+                            # just send json
+                            replytosend = dev.states['pendingCommands']
+                            self.plugin.logger.info(u'Windows PC Command Sent to Device: '+unicode(dev.name));
                             if self.plugin.debugextra:
                                 self.plugin.logger.debug('Command Processed: Sending reply:'+unicode(replytosend))
                             ## Delete the info
@@ -678,13 +719,13 @@ class httpHandler(BaseHTTPRequestHandler):
                         MACaddress = dictparams['MAC']
                     idletime = 0
                     if 'Idle' in dictparams:
-                        idletime = float(dictparams['Idle'])
+                        idletime = dictparams['Idle']
                     userName = 'unknown'
                     if 'userName' in dictparams:
                         userName = dictparams['userName']
                     upTime = 0
                     if 'upTime' in dictparams:
-                        upTime = float(dictparams['upTime'])
+                        upTime = dictparams['upTime']
                     version = 'unknown'
                     if 'version' in dictparams:
                         version = dictparams['version']

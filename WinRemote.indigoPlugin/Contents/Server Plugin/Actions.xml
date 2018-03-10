@@ -26,7 +26,7 @@
     </Action>
 
     <Action id="turnOFF">
-    <Name>Lock Computer</Name>
+    <Name>Restart Computer</Name>
     <CallbackMethod>actionLock</CallbackMethod>
         <ConfigUI>
             <Field id="computer" type="list" rows="14">
@@ -35,7 +35,36 @@
             </Field>
         </ConfigUI>
     </Action>
+    <Action id="restart">
+    <Name>Lock Computer</Name>
+    <CallbackMethod>actionRestart</CallbackMethod>
+        <ConfigUI>
+            <Field id="computer" type="list" rows="14">
+                <Label>Select Computers(s)</Label>
+                <List class="indigo.devices" filter="self.WindowsComputer"/>
+            </Field>
+        </ConfigUI>
+    </Action>
 
+    <Action id="runProcess">
+    <Name>Run Process</Name>
+    <CallbackMethod>actionrunProcess</CallbackMethod>
+        <ConfigUI>
+            <Field id="computer" type="list" rows="14">
+                <Label>Select Computers(s)</Label>
+                <List class="indigo.devices" filter="self.WindowsComputer"/>
+            </Field>
+            <Field id="process" type="textfield">
+            <Label>Process to Run:</Label>
+            <Description>Process to run</Description>
+            </Field>
+            <Field id="arguments" type="textfield">
+            <Label>Arguments:</Label>
+            <Description>Arguments</Description>
+        </Field>
+
+        </ConfigUI>
+    </Action>
 
     <Action id="wakeonMAC">
     <Name>Wake Computer using WakeonLan</Name>
