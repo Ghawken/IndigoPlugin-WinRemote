@@ -388,7 +388,7 @@ class Plugin(indigo.PluginBase):
         self.updater.update()
 
     def pluginstoreUpdate(self):
-        iurl = 'http://www.indigodomo.com/pluginstore/'
+        iurl = 'http://www.indigodomo.com/pluginstore/160/'
         self.browserOpen(iurl)
 
 ######################
