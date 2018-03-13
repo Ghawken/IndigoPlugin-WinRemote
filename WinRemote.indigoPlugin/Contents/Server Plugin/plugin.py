@@ -126,6 +126,14 @@ class Plugin(indigo.PluginBase):
             self.debugLevel = valuesDict.get('showDebugLevel', "10")
             self.debugLog(u"User prefs saved.")
             self.listenPort = int(valuesDict.get('serverport',9123))
+            self.debugextra = valuesDict.get('debugextra', False)
+            try:
+                self.logLevel = int(valuesDict[u"showDebugLevel"])
+            except:
+                self.logLevel = logging.INFO
+
+            self.indigo_log_handler.setLevel(self.logLevel)
+            self.logger.debug(u"logLevel = " + str(self.logLevel))
 
         return True
 

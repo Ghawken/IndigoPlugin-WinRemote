@@ -4,5 +4,8 @@
     <Name>Toggle Debugging</Name>
     <CallbackMethod>toggleDebugEnabled</CallbackMethod>
   </MenuItem>
-
+    <MenuItem id="checkForUpdates">
+        <Name>Check for Updates</Name>
+        <CallbackMethod>checkForUpdates</CallbackMethod>
+    </MenuItem>
 </MenuItems>

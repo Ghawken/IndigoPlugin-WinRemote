@@ -116,6 +116,8 @@ class GitHubPluginUpdater(object):
 			self.logger.debug('No release available')
 			return None
 
+		#self.plugin.logger.error(unicode(update))
+
 		# assume the tag is the release version
 		latestVersion = update['tag_name'].lstrip('v')
 		self.logger.debug('Latest release is: %s' % latestVersion)
@@ -182,14 +184,14 @@ class GitHubPluginUpdater(object):
 		f = subprocess.Popen(["curl",  requestPath], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
 	#'-H', str(headers), "-k",
 		out, err = f.communicate()
-		if self.plugin.debugother:
-			self.logger.debug(u'HTTP Err result:'+unicode(err) )
-			self.logger.debug(u'ReturnCode:{0}'.format(unicode(f.returncode)))
+
+		self.logger.debug(u'HTTP Err result:'+unicode(err) )
+		self.logger.debug(u'ReturnCode:{0}'.format(unicode(f.returncode)))
 
 		if (int(f.returncode) == 0):
 			data = json.loads(out)
-			if self.plugin.debugother:
-				self.logger.debug(u'Json results:'+unicode(data))
+
+			self.logger.debug(u'Json results:'+unicode(data))
 		elif (400 <= f.status < 500):
 			error = json.loads(out)
 			self.logger.error('%s' % error['message'])
