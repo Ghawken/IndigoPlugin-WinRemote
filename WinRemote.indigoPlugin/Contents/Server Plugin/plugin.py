@@ -688,7 +688,8 @@ class httpHandler(BaseHTTPRequestHandler):
                             {'key': 'deviceIsOnline', 'value': True},
                             {'key': 'onOffState', 'value': True},
                             {'key': 'deviceTimestamp', 'value': str(t.time())},
-                            {'key': 'ipAddress', 'value': str(self.client_address[0])}
+                            {'key': 'ipAddress', 'value': str(self.client_address[0])},
+                            {'key': 'pendingCommands', 'value':''}
                         ]
                         dev.updateStatesOnServer(stateList)
                         # Create device and then return
