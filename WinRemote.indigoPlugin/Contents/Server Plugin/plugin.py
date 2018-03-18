@@ -475,6 +475,18 @@ class Plugin(indigo.PluginBase):
             self.logger.exception(u'Exception in action Send Message')
         return
 
+    def actionRemovecommand(self, valuesDict):
+        self.logger.debug(u'action Remove Command.')
+        try:
+            computers = valuesDict.props['computer']
+            #message = 'This computer will be turned off in 10 seconds'
+            for dev in indigo.devices.itervalues('self.WindowsComputer'):
+                if str(dev.id) in computers:
+                    dev.updateStateOnServer('pendingCommands', value='', uiValue='')
+        except:
+            self.logger.exception(u'Exception in action Remove Command Message')
+        return
+
     def actionTurnOff(self, valuesDict):
         self.logger.debug(u'Turn Off Called.')
         try:
@@ -483,7 +495,6 @@ class Plugin(indigo.PluginBase):
             for dev in indigo.devices.itervalues('self.WindowsComputer'):
                 if str(dev.id) in computers:
                     turnOff = dev.pluginProps.get('turnOff', False)
-
                    # tobesent = 'COMMAND OFF',message
                     tobesent = {'COMMAND': 'OFF','COMMAND2':'', 'COMMAND3':'','COMMAND4':'' }
                     if turnOff == False:
@@ -491,7 +502,7 @@ class Plugin(indigo.PluginBase):
                     else:
                         self.logger.debug(u'Turn Off Command not sent as Disabled within Device Config')
         except:
-            self.logger.exception(u'Exception in action Send Message')
+            self.logger.exception(u'Exception in action Turn Off')
         return
 
     def actionLock(self, valuesDict):

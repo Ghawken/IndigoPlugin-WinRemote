@@ -25,7 +25,16 @@
             </Field>
         </ConfigUI>
     </Action>
-
+    <Action id="removeCommand">
+    <Name>Remove any Pending Commands</Name>
+    <CallbackMethod>actionRemovecommand</CallbackMethod>
+        <ConfigUI>
+            <Field id="computer" type="list" rows="14">
+                <Label>Select Computers(s)</Label>
+                <List class="indigo.devices" filter="self.WindowsComputer"/>
+            </Field>
+        </ConfigUI>
+    </Action>
     <Action id="restart">
     <Name>Restart Computer</Name>
     <CallbackMethod>actionRestart</CallbackMethod>
