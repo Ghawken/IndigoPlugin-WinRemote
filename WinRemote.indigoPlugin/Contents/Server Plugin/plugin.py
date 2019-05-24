@@ -206,17 +206,6 @@ class Plugin(indigo.PluginBase):
                 self.prefsUpdated = False
                 self.sleep(0.5)
 
-
-                if self.updateFrequency > 0:
-                    if t.time() > self.next_update_check:
-                        try:
-                            self.checkForUpdates()
-                            self.next_update_check = t.time() + self.updateFrequency
-                        except:
-                            self.logger.debug(
-                            u'Error checking for update - ? No Internet connection.  Checking again in 24 hours')
-                            self.next_update_check = t.time() + 86400;
-
                 if t.time() >= self.checkComputers:
                     self.checktheComputers()
                     self.checkComputers = t.time()+60

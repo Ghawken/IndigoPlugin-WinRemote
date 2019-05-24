@@ -25,25 +25,25 @@
 
    <Field id="sep7another" type="separator"/>
 
-  <Field id="space1" type="label" fontColor="black">
+  <Field id="space1" type="label" fontColor="black" hidden="true">
     <Label>Check for Updates:</Label>
   </Field>
 
-  <Field id="sep6" type="separator"/>
+  <Field id="sep6" type="separator" hidden="true"/>
 
-  <Field id="space2" type="label" fontSize="small" fontColor="black">
+  <Field id="space2" type="label" fontSize="small" fontColor="black" hidden="true" >
     <Label>The amount of time that the plugin will wait between checking for updated version</Label>
   </Field>
 
-  <Field id="updateFrequency" type="textfield" defaultValue="24" tooltip="Select preference for how often updates will be checked">
+  <Field id="updateFrequency" type="textfield" defaultValue="24" tooltip="Select preference for how often updates will be checked" hidden="true">
     <Label>Update Check Interval:(hours)</Label>
   </Field>
 
-  <Field id="openStore" type="checkbox" tooltip="Will automatic install newer version at check.">
+  <Field id="openStore" type="checkbox" tooltip="Will automatic install newer version at check." hidden="true">
     <Label> Open PluginStore if newer version at time of check</Label>
     <Description>Enable/Disable</Description>
   </Field>
- <Field id="sep9a" type="separator"/>
+ <Field id="sep9a" type="separator" hidden="true"/>
 
   <Field id="space101" type="label" alignText="left">
     <Label>Debugging:</Label>
