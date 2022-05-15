@@ -23,15 +23,16 @@ import json
 
 ## Role together own httpserver
 import string
-from urlparse import urlparse, parse_qsl
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
-from SocketServer import ThreadingMixIn
+from urllib.parse import urlparse, parse_qsl
+#from urlparse import urlparse, parse_qsl
+from http.server import BaseHTTPRequestHandler,HTTPServer
+#from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+from socketserver import ThreadingMixIn
 
 
 import sys
 import time as t
 
-from ghpu import GitHubPluginUpdater
 
 try:
     import indigo
@@ -150,7 +151,7 @@ class Plugin(indigo.PluginBase):
         errorDict = indigo.Dict()
         if 'serverport' in valuesDict:
             try:
-                # self.logger.debug(u'Old listenPort is :' + unicode(self.oldlistenPort))
+                # self.logger.debug(u'Old listenPort is :' + str(self.oldlistenPort))
                 self.listenPort = int(valuesDict['serverport'])
             except:
                 # self.logger.exception(u'Httpserverport Error')
@@ -160,7 +161,7 @@ class Plugin(indigo.PluginBase):
                 errorDict['showAlertText'] = 'The field is invalid as it is not an integer'
                 return (False, valuesDict, errorDict)
 
-        #self.logger.info(unicode(valuesDict))
+        #self.logger.info(str(valuesDict))
         return True, valuesDict
 
     def restartPlugin(self):
@@ -222,13 +223,13 @@ class Plugin(indigo.PluginBase):
         if self.debugextra:
             self.logger.debug(u'checkComputers run')
 
-        for dev in indigo.devices.itervalues('self.WindowsComputer'):
+        for dev in indigo.devices.iter('self.WindowsComputer'):
             if dev.enabled:
                 if dev.states['deviceIsOnline']:
 
                     if (float(t.time())-120)> float(dev.states['deviceTimestamp']) :  #2 minutes no communication
-                        self.logger.debug(u't.time +120 equals:'+unicode(float(t.time())+120))
-                        self.logger.debug(u'Offline : deviceTimestamp:t.time:'+unicode(t.time())+' Timestamp:'+unicode(dev.states['deviceTimestamp']))
+                        self.logger.debug(u't.time +120 equals:'+str(float(t.time())+120))
+                        self.logger.debug(u'Offline : deviceTimestamp:t.time:'+str(t.time())+' Timestamp:'+str(dev.states['deviceTimestamp']))
                         dev.updateStateOnServer('deviceIsOnline', value=False, uiValue='Offline')
                         dev.updateStateOnServer('onOffState', value=False)
 
@@ -244,7 +245,6 @@ class Plugin(indigo.PluginBase):
 
 
         self.logger.debug(u"Starting Plugin. startup() method called.")
-        self.updater = GitHubPluginUpdater(self)
 
         self.myThread = threading.Thread(target=self.listenHTTP, args=())
         self.myThread.daemon = True
@@ -282,15 +282,15 @@ class Plugin(indigo.PluginBase):
     def pluginTriggering(self, valuesDict):
         self.logger.debug(u'pluginTriggering called')
         try:
-            #self.logger.info(unicode(valuesDict))
+            #self.logger.info(str(valuesDict))
             action = valuesDict.pluginTypeId
             actionevent = valuesDict.props['plugintriggersetting']
             cameras = valuesDict.props['deviceCamera']
-            #self.logger.info(unicode(cameras))
+            #self.logger.info(str(cameras))
 
-            for dev in indigo.devices.itervalues('self.WindowsComputer'):
+            for dev in indigo.devices.iter('self.WindowsComputer'):
                 if str(dev.id) in cameras:
-                    self.logger.debug(u'Action is:' + unicode(action) + u' & Camera is:' + unicode(dev.name)+u' and action:'+unicode(actionevent))
+                    self.logger.debug(u'Action is:' + str(action) + u' & Camera is:' + str(dev.name)+u' and action:'+str(actionevent))
                     if actionevent == 'False':
                         dev.updateStateOnServer('PluginTriggeringEnabled', value=False)
                         dev.updateStateOnServer('Motion', value=False ,uiValue='False')
@@ -318,7 +318,7 @@ class Plugin(indigo.PluginBase):
     def triggerCheck(self, device, camera, event):
 
         if self.debugtriggers:
-            self.logger.debug('triggerCheck run.  device.id:'+unicode(device.id)+' Camera:'+unicode(camera)+' Event:'+unicode(event))
+            self.logger.debug('triggerCheck run.  device.id:'+str(device.id)+' Camera:'+str(camera)+' Event:'+str(event))
         try:
             if self.pluginIsInitializing:
                 self.logger.info(u'Trigger: Ignore as WinRemote Plugin Just started.')
@@ -335,12 +335,12 @@ class Plugin(indigo.PluginBase):
                 return
 
 
-            for triggerId, trigger in sorted(self.triggers.iteritems()):
+            for triggerId, trigger in sorted(self.triggers.iter()):
 
                 if self.debugtriggers:
                     self.logger.debug("Checking Trigger %s (%s), Type: %s, Camera: %s" % (trigger.name, trigger.id, trigger.pluginTypeId, camera))
-                    #self.logger.debug(unicode(trigger))
-                #self.logger.error(unicode(trigger))
+                    #self.logger.debug(str(trigger))
+                #self.logger.error(str(trigger))
                 # Change to List for all Cameras
 
                 if str(device.id) not in trigger.pluginProps['deviceCamera']:
@@ -365,16 +365,10 @@ class Plugin(indigo.PluginBase):
 
     def checkForUpdates(self):
 
-        updateavailable = self.updater.getLatestVersion()
-        if updateavailable and self.openStore:
-            self.logger.info(u'WinRemote Plugin: Update Checking.  Update is Available.  Taking you to plugin Store. ')
-            self.sleep(2)
-            self.pluginstoreUpdate()
-        elif updateavailable and not self.openStore:
-            self.errorLog(u'WinRemote Plugin: Update Checking.  Update is Available.  Please check Store for details/download.')
+        return
 
     def updatePlugin(self):
-        self.updater.update()
+        return
 
     def pluginstoreUpdate(self):
         iurl = 'http://www.indigodomo.com/pluginstore/160/'
@@ -420,7 +414,7 @@ class Plugin(indigo.PluginBase):
             computers = valuesDict.props['computer']
             process = valuesDict.props['process']
             arguments = valuesDict.props['arguments']
-            for dev in indigo.devices.itervalues('self.WindowsComputer'):
+            for dev in indigo.devices.iter('self.WindowsComputer'):
 
                 if str(dev.id) in computers:
                     tobesent = { 'COMMAND':'PROCESS','COMMAND2':str(process), 'COMMAND3':str(arguments),'COMMAND4':'' }
@@ -436,7 +430,7 @@ class Plugin(indigo.PluginBase):
         try:
             computers = valuesDict.props['computer']
             message = valuesDict.props['message']
-            for dev in indigo.devices.itervalues('self.WindowsComputer'):
+            for dev in indigo.devices.iter('self.WindowsComputer'):
                 if str(dev.id) in computers:
                     #tobesent = 'COMMAND MESSAGE',message
                     tobesent = {'COMMAND': 'MESSAGE', 'COMMAND2': str(message), 'COMMAND3':'','COMMAND4':'' }
@@ -451,7 +445,7 @@ class Plugin(indigo.PluginBase):
         try:
             computers = valuesDict.props['computer']
             message = 'This computer will be restarted in 20 seconds'
-            for dev in indigo.devices.itervalues('self.WindowsComputer'):
+            for dev in indigo.devices.iter('self.WindowsComputer'):
                 if str(dev.id) in computers:
                     turnOff = dev.pluginProps.get('turnOff', False)
                     tobesent = {'COMMAND': 'RESTART','COMMAND2':'', 'COMMAND3':'','COMMAND4':'' }
@@ -469,7 +463,7 @@ class Plugin(indigo.PluginBase):
         try:
             computers = valuesDict.props['computer']
             #message = 'This computer will be turned off in 10 seconds'
-            for dev in indigo.devices.itervalues('self.WindowsComputer'):
+            for dev in indigo.devices.iter('self.WindowsComputer'):
                 if str(dev.id) in computers:
                     dev.updateStateOnServer('pendingCommands', value='', uiValue='')
         except:
@@ -481,7 +475,7 @@ class Plugin(indigo.PluginBase):
         try:
             computers = valuesDict.props['computer']
             message = 'This computer will be turned off in 10 seconds'
-            for dev in indigo.devices.itervalues('self.WindowsComputer'):
+            for dev in indigo.devices.iter('self.WindowsComputer'):
                 if str(dev.id) in computers:
                     turnOff = dev.pluginProps.get('turnOff', False)
                    # tobesent = 'COMMAND OFF',message
@@ -499,7 +493,7 @@ class Plugin(indigo.PluginBase):
         try:
             computers = valuesDict.props['computer']
             message = 'This computer will be Locked off in 10 seconds'
-            for dev in indigo.devices.itervalues('self.WindowsComputer'):
+            for dev in indigo.devices.iter('self.WindowsComputer'):
                 if str(dev.id) in computers:
                     tobesent = 'COMMAND LOCK',message
                     tobesent = {'COMMAND': 'LOCK','COMMAND2':'', 'COMMAND3':'','COMMAND4':'' }
@@ -525,7 +519,7 @@ class Plugin(indigo.PluginBase):
                     self.logger.debug(u'Wrong Format of MAC address ? not known.')
                     return
                 data = b'FFFFFFFFFFFF' + (macaddress * 20).encode()
-                self.logger.debug('Macaddress now:'+unicode(macaddress))
+                self.logger.debug('Macaddress now:'+str(macaddress))
 
                 send_data = b''
                 # Split up the hex values in pack
@@ -552,7 +546,7 @@ class Plugin(indigo.PluginBase):
         self.logger.debug(u'actionWakeonLAN MAC called')
         try:
             computers = valuesDict.props['computer']
-            for dev in indigo.devices.itervalues('self.WindowsComputer'):
+            for dev in indigo.devices.iter('self.WindowsComputer'):
                 if str(dev.id) in computers:
                     # Take the entered MAC address and format it to be sent via socket
                     if dev.states['MACaddress']!='unknown' or dev.states['MACaddress']!='':
@@ -567,7 +561,7 @@ class Plugin(indigo.PluginBase):
                             self.logger.debug(u'Wrong Format of MAC address ? not known.')
                             return
                         data = b'FFFFFFFFFFFF' + (macaddress * 20).encode()
-                        self.logger.debug('Macaddress now:'+unicode(macaddress))
+                        self.logger.debug('Macaddress now:'+str(macaddress))
 
                         send_data = b''
                         # Split up the hex values in pack
@@ -597,7 +591,7 @@ class httpHandler(BaseHTTPRequestHandler):
         self.plugin=plugin
         #self.logger = logger
         if self.plugin.debugextra:
-            self.plugin.logger.debug(u'New Http Handler thread:'+threading.currentThread().getName()+", total threads: "+str(threading.activeCount()))
+            self.plugin.logger.debug(u'New Http Handler thread:'+str(threading.current_thread().name)+", total threads: "+str(threading.active_count()))
         BaseHTTPRequestHandler.__init__(self, *args)
 
     def _set_headers(self):
@@ -610,18 +604,18 @@ class httpHandler(BaseHTTPRequestHandler):
         if self.plugin.debugextra:
             self.plugin.logger.debug(u'Received Http POST')
             self.plugin.logger.debug(u'Sending HTTP 200 Response')
-            self.plugin.logger.debug(u'Self Ip Address:'+unicode(self.client_address))
+            self.plugin.logger.debug(u'Self Ip Address:'+str(self.client_address))
         try:
 
             content_length = int(self.headers['Content-Length'])  # <--- Gets the size of data
             post_data = self.rfile.read(content_length)  # <--- Gets the data itself
               # <-- Print post data
             windowspath = self.path
-            windowsreply = str(post_data)
+            windowsreply = str(post_data.decode("utf-8") )
 
             if self.plugin.debugextra:
-                self.plugin.logger.debug(u'self.path data:'+unicode(self.path))
-                self.plugin.logger.debug(u'post.data data:'+unicode(post_data))
+                self.plugin.logger.debug(u'self.path data:'+str(self.path))
+                self.plugin.logger.debug(u'post.data data:'+str(post_data.decode("utf-8") ))
 
 
               # if StartupConnect will be Hostname
@@ -630,7 +624,7 @@ class httpHandler(BaseHTTPRequestHandler):
 
             dictparams = dict(parse_qsl(urlparse(windowspath).query))
             if self.plugin.debugextra:
-                self.plugin.logger.debug(unicode(dictparams))
+                self.plugin.logger.debug(str(dictparams))
 
             ## default to blank command set
             replytosend = { 'COMMAND':'','COMMAND2':'', 'COMMAND3':'', 'COMMAND4':'' }
@@ -640,7 +634,7 @@ class httpHandler(BaseHTTPRequestHandler):
             # check not first connection startup, if so move on
             if 'StartupConnect' not in self.path:
                 # need to check very device to see if matching hostname
-                for dev in indigo.devices.itervalues('self.WindowsComputer'):
+                for dev in indigo.devices.iter('self.WindowsComputer'):
                     if dev.states['HostName'] == dictparams['Hostname']:
                         # okay reply from or for this specific device
                         # now check pending commands
@@ -648,16 +642,16 @@ class httpHandler(BaseHTTPRequestHandler):
                             self.plugin.logger.debug('Command Matching HostName here...')
                         if str(dev.states['pendingCommands']) !='':
                             #commands = ast.literal_eval((dev.states['pendingCommands']))
-                            #self.plugin.logger.error(unicode(commands[0]))
-                            #self.plugin.logger.error(unicode(commands[1]))
+                            #self.plugin.logger.error(str(commands[0]))
+                            #self.plugin.logger.error(str(commands[1]))
                             #command = str(commands[0])
                             #command2 = str(commands[1])
                             #replytosend = command+' :'+command2+':'
                             # just send json
                             replytosend = dev.states['pendingCommands']
-                            self.plugin.logger.info(u'Windows PC Command Sent to Device: '+unicode(dev.name));
+                            self.plugin.logger.info(u'Windows PC Command Sent to Device: '+str(dev.name))
                             if self.plugin.debugextra:
-                                self.plugin.logger.debug('Command Processed: Sending reply:'+unicode(replytosend))
+                                self.plugin.logger.debug('Command Processed: Sending reply:'+str(replytosend))
                             ## Delete the info
                             dev.updateStateOnServer('pendingCommands', value='', uiValue='None')
             ######
@@ -669,18 +663,18 @@ class httpHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
             # if self.plugin.debugserver:
-            #     self.plugin.logger.debug(unicode('After Indigo Post Check'))
+            #     self.plugin.logger.debug(str('After Indigo Post Check'))
 
             if 'StartupConnect' in self.path:
                 self.plugin.logger.debug(u'Startup of PC IndigoPlugin Noted:')
                 FoundDevice = False
-                for dev in indigo.devices.itervalues('self.WindowsComputer'):
-                    #self.plugin.logger.debug(str(dev.states['HostName'])+': and :'+unicode(windowsreply))
+                for dev in indigo.devices.iter('self.WindowsComputer'):
+                    #self.plugin.logger.debug(str(dev.states['HostName'])+': and :'+str(windowsreply))
                     if str(dev.states['HostName']) == windowsreply:
                         FoundDevice = True
                         #startup and device know - just update
                         if self.plugin.debugextra:
-                            self.plugin.logger.debug(u'Do these Match?:'+str(dev.states['HostName']) + ': and :' + unicode(windowsreply))
+                            self.plugin.logger.debug(u'Do these Match?:'+str(dev.states['HostName']) + ': and :' + str(windowsreply))
                             self.plugin.logger.debug(u'Matching Hostname Found: '+windowsreply+' Updating States.')
                         t.sleep(0.5)
                         stateList = [
@@ -715,7 +709,7 @@ class httpHandler(BaseHTTPRequestHandler):
                     #Create device and then return
                     return
 
-            for dev in indigo.devices.itervalues('self.WindowsComputer'):
+            for dev in indigo.devices.iter('self.WindowsComputer'):
                 if dev.enabled:
                     CPU = 'unknown'
                     if 'CPU' in dictparams:
